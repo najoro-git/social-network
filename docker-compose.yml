@@ -1,0 +1,47 @@
+#permet de faire tourner plusieurs conteneurs ensemble
+
+services: #listes des services (conteneurs)
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: social_app
+    restart: unless-stopped
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+      - redis
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: social_network
+      DB_USER: social_user
+      DB_PASSWORD: secret123
+
+  db:
+    image: mysql:8.0
+    container_name: social_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: social_network
+      MYSQL_USER: social_user
+      MYSQL_PASSWORD: secret123
+      MYSQL_ROOT_PASSWORD: rootsecret123
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:alpine
+    container_name: social_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:
