@@ -23,6 +23,9 @@
 //}
 require_once __DIR__ . '/../config/config.php';
 
+// Routes (on les enrichira au fur et à mesure)
+
+
 use App\Core\Router;
 use App\Core\Session;
 
@@ -30,7 +33,12 @@ Session::start();
 
 $router = new Router();
 
-// Routes (on les enrichira au fur et à mesure)
-$router->get('/', [\App\Controllers\HomeController::class, 'index']);
+// Routes
+$router->get('/',          [\App\Controllers\HomeController::class, 'index']);
+$router->get('/register',  [\App\Controllers\AuthController::class, 'registerForm']);
+$router->post('/register', [\App\Controllers\AuthController::class, 'register']);
+$router->get('/login',     [\App\Controllers\AuthController::class, 'loginForm']);
+$router->post('/login',    [\App\Controllers\AuthController::class, 'login']);
+$router->get('/logout',    [\App\Controllers\AuthController::class, 'logout']);
 
 $router->dispatch();
