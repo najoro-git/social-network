@@ -47,4 +47,32 @@ class User
             'password' => $hash,
         ]);
     }
+
+    public function update(int $id, string $username, string $bio, ?string $avatarPath): bool
+    {
+        if ($avatarPath) {
+            $stmt = $this->db->prepare("
+                UPDATE users 
+                SET username = :username, bio = :bio, avatar = :avatar
+                WHERE id = :id
+            ");
+            return $stmt->execute([
+                'username' => $username,
+                'bio'      => $bio,
+                'avatar'   => $avatarPath,
+                'id'       => $id,
+            ]);
+        } else {
+            $stmt = $this->db->prepare("
+                UPDATE users 
+                SET username = :username, bio = :bio
+                WHERE id = :id
+            ");
+            return $stmt->execute([
+                'username' => $username,
+                'bio'      => $bio,
+                'id'       => $id,
+            ]);
+        }
+    }
 }
