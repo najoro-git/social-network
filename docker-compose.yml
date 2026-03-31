@@ -22,7 +22,7 @@ services: #listes des services (conteneurs)
       DB_PASSWORD: secret123
 
   db:
-    image: mysql:8.0
+    image: mysql:8.0 #image officielle de mysql version 8.0
     container_name: social_db
     restart: unless-stopped
     environment:

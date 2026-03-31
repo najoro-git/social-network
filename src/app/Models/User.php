@@ -4,7 +4,7 @@ namespace App\Models;
 use App\Core\Database;
 use PDO;
 
-class User
+class User //your own custom data type to represent a user in your application
 {
     private PDO $db;
 

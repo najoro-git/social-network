@@ -25,6 +25,7 @@ require_once __DIR__ . '/../config/config.php';
 
 // Routes (on les enrichira au fur et à mesure)
 
+
 use App\Core\Router;
 use App\Core\Session;
 
@@ -46,5 +47,11 @@ $router->get('/logout',    [\App\Controllers\AuthController::class, 'logout']);
 $router->get('/profile',       [\App\Controllers\ProfileController::class, 'index']);
 $router->get('/profile/edit',  [\App\Controllers\ProfileController::class, 'editForm']);
 $router->post('/profile/edit', [\App\Controllers\ProfileController::class, 'edit']);
+
+// Posts
+$router->post('/posts/create', [\App\Controllers\PostController::class, 'create']);
+$router->get('/posts/edit',    [\App\Controllers\PostController::class, 'editForm']);
+$router->post('/posts/edit',   [\App\Controllers\PostController::class, 'edit']);
+$router->post('/posts/delete', [\App\Controllers\PostController::class, 'delete']);
 
 $router->dispatch();

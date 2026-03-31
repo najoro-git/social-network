@@ -1,19 +1,23 @@
-# Recette pour construire un image personnalisée
-#image officielle déjà installés.
 FROM php:8.3-apache
 
 # Activer mod_rewrite
 RUN a2enmod rewrite
 
-# Installer les extensions PHP
+# Installer les dépendances système + support JPEG/PNG/GIF
 RUN apt-get update && apt-get install -y \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libzip-dev \
+    libwebp-dev \
     zip \
     unzip \
     git \
     curl \
+  && docker-php-ext-configure gd \
+      --with-freetype \
+      --with-jpeg \
+      --with-webp \
   && docker-php-ext-install \
     pdo \
     pdo_mysql \
@@ -22,14 +26,14 @@ RUN apt-get update && apt-get install -y \
   && pecl install redis \
   && docker-php-ext-enable redis
 
-# Installer Composer : gestion de dépendances php depuis une autre image
+# Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Config Apache : autoriser .htaccess
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' \
     /etc/apache2/apache2.conf
 
-# Dossier de travail 
+# Dossier de travail
 WORKDIR /var/www/html
 
 # DocumentRoot → public/
