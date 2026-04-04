@@ -75,4 +75,21 @@ class User //your own custom data type to represent a user in your application
             ]);
         }
     }
+
+    // Rechercher des utilisateurs par username
+    public function search(string $query, int $excludeId): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT id, username, avatar
+            FROM users
+            WHERE username LIKE :query
+            AND id != :exclude_id
+            LIMIT 10
+        ");
+        $stmt->execute([
+            'query'      => '%' . $query . '%',
+            'exclude_id' => $excludeId,
+        ]);
+        return $stmt->fetchAll();
+    }
 }

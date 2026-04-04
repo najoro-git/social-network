@@ -18,7 +18,8 @@
     </a>
     <div class="navbar-links">
         <a href="/"><span class="material-icons">home</span><span>Feed</span></a>
-        <a href="/profile"><span class="material-icons">account_circle</span><span><?= htmlspecialchars(\App\Core\Session::get('username') ?? 'Profil') ?></span></a>
+        <a href="/messages"><span class="material-icons">chat</span><span>Messages</span></a>
+        <a href="/profile"><span class="material-icons">account_circle</span><span><?= htmlspecialchars(\App\Core\Session::get('username') ?? '') ?></span></a>
         <a href="/logout" class="btn-logout"><span class="material-icons">power_settings_new</span><span>Quitter</span></a>
     </div>
 </nav>

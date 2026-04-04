@@ -72,5 +72,13 @@ $router->post('/posts/like', [\App\Controllers\LikeController::class, 'toggle'])
 // Posts détail
 $router->get('/posts/{id}', [\App\Controllers\PostController::class, 'show']);
 
+// Messagerie
+$router->get('/messages',        [\App\Controllers\MessagingController::class, 'index']);
+$router->get('/messages/new',    [\App\Controllers\MessagingController::class, 'new']);
+$router->get('/messages/search', [\App\Controllers\MessagingController::class, 'search']);
+$router->post('/messages/send',  [\App\Controllers\MessagingController::class, 'send']);
+$router->post('/messages/delete',[\App\Controllers\MessagingController::class, 'delete']);
+$router->get('/messages/{id}',   [\App\Controllers\MessagingController::class, 'show']);
+
 
 $router->dispatch();
