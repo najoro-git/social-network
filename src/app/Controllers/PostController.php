@@ -155,4 +155,36 @@ class PostController
         }
         if (isset($img)) imagedestroy($img);
     }
+
+    // GET /posts/{id}
+    public function show(): void
+    {
+        Auth::require();
+
+        $id   = $id = (int) ($_GET['id'] ?? 0);;
+        $post = $this->post->findById($id);
+
+        if (!$post) {
+            header('Location: /');
+            exit;
+        }
+
+        // Pagination commentaires
+        $perPage     = 10;
+        $currentPage = max(1, (int) ($_GET['page'] ?? 1));
+        $offset      = ($currentPage - 1) * $perPage;
+
+        $comment     = new \App\Models\Comment();
+        $comments    = $comment->getByPost($id, $perPage, $offset);
+        $totalCom    = $comment->countByPost($id);
+        $totalPages  = (int) ceil($totalCom / $perPage);
+
+        // Likes
+        $like        = new \App\Models\Like();
+        $userId      = Auth::user()['id'];
+        $liked       = $like->hasLiked($userId, $id);
+        $likeCount   = $like->count($id);
+
+        require_once __DIR__ . '/../Views/posts/show.php';
+    }
 }

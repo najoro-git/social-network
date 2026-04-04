@@ -3,115 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <style>
-        * { 
-            box-sizing: border-box;
-            margin: 0; 
-            padding: 0; 
-        }
-        body { 
-            font-family: Arial, sans-serif;
-             background: #f0f2f5;
-              display: flex;
-               justify-content: center; 
-               align-items: center;
-                min-height: 100vh;
-             }
-        .card { background: white;
-        padding: 2rem; 
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-        width: 100%; max-width: 400px; 
-        }
-        h1 { text-align: center;
-         margin-bottom: 1.5rem;
-          color: #1877f2; 
-        }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block;
-         margin-bottom: 0.3rem;
-          font-weight: bold;
-           font-size: 0.9rem;
-         }
-        input { width: 100%;
-         padding: 0.7rem; 
-         border: 1px solid #ddd;
-          border-radius: 4px; 
-          font-size: 1rem; 
-        }
-        button { width: 100%;
-         padding: 0.8rem; 
-         background: #1877f2;
-          color: white; 
-          border: none; 
-          border-radius: 4px;
-           font-size: 1rem;
-            cursor: pointer;
-             margin-top: 0.5rem;
-            }
-        button:hover { background: #166fe5; }
-        .errors { background: #ffeaea;
-         border: 1px solid #f44;
-          padding: 0.8rem; 
-          border-radius: 4px; 
-          margin-bottom: 1rem;
-         }
-        .errors li { margin-left: 1rem;
-         color: #c00;
-          font-size: 0.9rem;
-         }
-        .success { 
-            background: #eaffea;
-         border: 1px solid #4c4; 
-         padding: 0.8rem; 
-         border-radius: 4px; 
-         margin-bottom: 1rem; 
-         color: #060; 
-         font-size: 0.9rem; 
-        }
-        .link { 
-            text-align: center; 
-        margin-top: 1rem; 
-        font-size: 0.9rem; 
-        }
-        .link a { color: #1877f2; 
-        text-decoration: none; 
-    }
-    </style>
+    <title>SocialNet — Connexion</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/main.css">
 </head>
-<body>
-<div class="card">
-    <h1>Connexion</h1>
+<body class="bg-auth">
 
-    <?php if (App\Core\Session::get('success')): ?>
-        <div class="success"><?= htmlspecialchars(App\Core\Session::get('success')) ?></div>
-        <?php App\Core\Session::set('success', null); ?>
-    <?php endif; ?>
+<div class="auth-page">
+    <div class="auth-card">
 
-    <?php if (App\Core\Session::get('errors')): ?>
-        <ul class="errors">
-            <?php foreach (App\Core\Session::get('errors') as $error): ?>
-                <li><?= htmlspecialchars($error) ?></li>
-            <?php endforeach; ?>
-            <?php App\Core\Session::set('errors', []); ?>
-        </ul>
-    <?php endif; ?>
-
-    <form method="POST" action="/login">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" required>
+        <div class="auth-logo">
+            <div class="auth-logo-title">SOCIALNET</div>
+            <div class="auth-logo-sub">Cyberpunk Network v1.0</div>
         </div>
-        <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" name="password" required>
+
+        <?php if (\App\Core\Session::get('success')): ?>
+            <div class="alert alert-success">
+                <span class="material-icons">check_circle</span>
+                <?= htmlspecialchars(\App\Core\Session::get('success')) ?>
+            </div>
+            <?php \App\Core\Session::set('success', null); ?>
+        <?php endif; ?>
+
+        <?php if (\App\Core\Session::get('errors')): ?>
+            <div class="alert alert-error">
+                <span class="material-icons">error</span>
+                <ul>
+                    <?php foreach (\App\Core\Session::get('errors') as $error): ?>
+                        <li><?= htmlspecialchars($error) ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            <?php \App\Core\Session::set('errors', []); ?>
+        <?php endif; ?>
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="material-icons" style="font-size:0.9rem;vertical-align:middle">mail</span>
+                    Email
+                </label>
+                <input type="email" name="email" class="form-control"
+                       placeholder="user@network.io" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="material-icons" style="font-size:0.9rem;vertical-align:middle">lock</span>
+                    Mot de passe
+                </label>
+                <input type="password" name="password" class="form-control"
+                       placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full" style="margin-top:0.5rem">
+                <span class="material-icons">login</span>
+                Connexion
+            </button>
+        </form>
+
+        <div class="auth-divider"><span>ou</span></div>
+
+        <div class="auth-footer">
+            Pas encore de compte ?
+            <a href="/register">Créer un compte</a>
         </div>
-        <button type="submit">Se connecter</button>
-    </form>
-    <div class="link">
-        Pas encore de compte ? <a href="/register">S'inscrire</a>
+
     </div>
 </div>
+
+<script src="/assets/js/main.js"></script>
 </body>
 </html>

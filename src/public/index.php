@@ -33,8 +33,13 @@ Session::start();
 
 $router = new Router();
 
+// Landing page
+$router->get('/landing', [\App\Controllers\HomeController::class, 'landing']);
+
 // Home
-$router->get('/', [\App\Controllers\HomeController::class, 'index']);
+// $router->get('/', [\App\Controllers\HomeController::class, 'index']);
+// Route racine — landing si non connecté, feed si connecté
+$router->get('/', [\App\Controllers\HomeController::class, 'root']);
 
 // Auth
 $router->get('/register',  [\App\Controllers\AuthController::class, 'registerForm']);
@@ -53,5 +58,19 @@ $router->post('/posts/create', [\App\Controllers\PostController::class, 'create'
 $router->get('/posts/edit',    [\App\Controllers\PostController::class, 'editForm']);
 $router->post('/posts/edit',   [\App\Controllers\PostController::class, 'edit']);
 $router->post('/posts/delete', [\App\Controllers\PostController::class, 'delete']);
+
+// Posts détail
+$router->get('/posts/show', [\App\Controllers\PostController::class, 'show']);
+
+// Commentaires
+$router->post('/comments/create', [\App\Controllers\CommentController::class, 'create']);
+$router->post('/comments/delete', [\App\Controllers\CommentController::class, 'delete']);
+
+// Likes
+$router->post('/posts/like', [\App\Controllers\LikeController::class, 'toggle']);
+
+// Posts détail
+$router->get('/posts/{id}', [\App\Controllers\PostController::class, 'show']);
+
 
 $router->dispatch();
