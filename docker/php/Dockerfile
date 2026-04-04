@@ -1,10 +1,6 @@
 FROM php:8.3-apache
 
-# Activer mod_rewrite et fixer le problème MPM
-RUN a2enmod rewrite \
-  && a2dismod mpm_event mpm_worker 2>/dev/null || true \
-  && a2enmod mpm_prefork
-
+# Fixer le problème MPM — désactiver tout puis activer prefork uniquement
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -18,6 +14,14 @@ RUN apt-get update && apt-get install -y \
   && docker-php-ext-install pdo pdo_mysql zip gd \
   && pecl install redis \
   && docker-php-ext-enable redis
+
+# Désactiver les MPM en conflit
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
+          /etc/apache2/mods-enabled/mpm_event.conf \
+          /etc/apache2/mods-enabled/mpm_worker.load \
+          /etc/apache2/mods-enabled/mpm_worker.conf \
+  && a2enmod mpm_prefork \
+  && a2enmod rewrite
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
