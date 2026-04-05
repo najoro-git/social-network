@@ -42,6 +42,12 @@ RUN chown -R www-data:www-data /var/www/html \
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
+RUN apk add --no-cache \
+    nginx \
+    netcat-openbsd \
+    libpng-dev \
+    
+
 EXPOSE 80
 
 CMD ["/start.sh"]

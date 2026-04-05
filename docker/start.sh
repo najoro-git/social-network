@@ -9,16 +9,16 @@ echo "listen = 127.0.0.1:9000" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 echo "clear_env = no" >> /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Remplacer le port dans la config nginx
-sed -i "s/NGINX_PORT/$PORT/" /etc/nginx/http.d/default.conf
+sed -i "s|NGINX_PORT|$PORT|" /etc/nginx/http.d/default.conf
 
 # Démarrer PHP-FPM en arrière-plan
 php-fpm -D
 
-# Attendre PHP-FPM
-sleep 3
-
-# Vérifier que PHP-FPM écoute bien sur 9000
-netstat -tlnp 2>/dev/null | grep 9000 || echo "PHP-FPM not on 9000!"
+while ! nc -z 127.0.0.1 9000; do
+  echo "Waiting for PHP-FPM "
+  sleep 1
+done
+echo "PHP-FPM is ready."
 
 # Tester la config nginx
 nginx -t
