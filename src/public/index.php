@@ -81,8 +81,6 @@ $router->post('/messages/delete',[\App\Controllers\MessagingController::class, '
 $router->get('/messages/{id}',   [\App\Controllers\MessagingController::class, 'show']);
 
 // Migration temporaire
-$router->get('/migrate', function() {
-    require_once __DIR__ . '/../src/migrate.php';
-});
+$router->get('/migrate', [\App\Controllers\MigrationController::class, 'run']);
 
 $router->dispatch();
