@@ -18,10 +18,9 @@ while ! nc -z 127.0.0.1 9000; do
   echo "Waiting for PHP-FPM "
   sleep 1
 done
-echo "PHP-FPM is ready."
 
-# Tester la config nginx
-nginx -t
+echo "starting nginx on port $PORT"
 
-# Démarrer Nginx
-exec nginx -g "daemon off;"
+
+# Démarrer
+nginx -g "daemon off;"
