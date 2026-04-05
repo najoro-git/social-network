@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Utiliser le Port de railway (defaut 80)
+PORT=${PORT:-80}
+
+# Remplacer $PORT dans la configuration Nginx
+sed -i "s/\$PORT/$PORT/g" /etc/nginx/http.d/default.conf
+
 # Passer les variables d'env à PHP-FPM
 echo "clear_env = no" >> /usr/local/etc/php-fpm.d/www.conf
 
