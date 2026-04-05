@@ -2,7 +2,7 @@ FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache \
     nginx \
-    busybox-extras \
+    libpng-dev \
     libjpeg-turbo-dev \
     freetype-dev \
     libzip-dev \
@@ -31,7 +31,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN mkdir -p /run/nginx
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
-
 COPY src/ /var/www/html/
 
 RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
@@ -42,12 +41,5 @@ RUN chown -R www-data:www-data /var/www/html \
 COPY docker/start.sh /start.sh
 RUN chmod +x /start.sh
 
-RUN apk add --no-cache \
-    nginx \
-    netcat-openbsd \
-    libpng-dev \
-    
-
 EXPOSE 80
-
 CMD ["/start.sh"]
