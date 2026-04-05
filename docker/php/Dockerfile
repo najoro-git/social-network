@@ -1,40 +1,47 @@
-FROM php:8.3-apache
+FROM php:8.3-fpm-alpine
 
-# Fixer le problème MPM — désactiver tout puis activer prefork uniquement
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache \
+    nginx \
     libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
     libzip-dev \
     libwebp-dev \
-    libssl-dev \
-    zip unzip git curl \
+    autoconf \
+    g++ \
+    make \
+    zip \
+    unzip \
+    git \
+    curl \
   && docker-php-ext-configure gd \
-      --with-freetype --with-jpeg --with-webp \
-  && docker-php-ext-install pdo pdo_mysql zip gd \
+      --with-freetype \
+      --with-jpeg \
+      --with-webp \
+  && docker-php-ext-install \
+      pdo \
+      pdo_mysql \
+      zip \
+      gd \
   && pecl install redis \
-  && docker-php-ext-enable redis
-
-# Désactiver les MPM en conflit
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.load \
-          /etc/apache2/mods-enabled/mpm_event.conf \
-          /etc/apache2/mods-enabled/mpm_worker.load \
-          /etc/apache2/mods-enabled/mpm_worker.conf \
-  && a2enmod mpm_prefork \
-  && a2enmod rewrite
+  && docker-php-ext-enable redis \
+  && apk del autoconf g++ make
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-RUN sed -i 's/AllowOverride None/AllowOverride All/g' \
-    /etc/apache2/apache2.conf
+RUN mkdir -p /run/nginx
+COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 
 COPY src/ /var/www/html/
 
 RUN cd /var/www/html && composer install --no-dev --optimize-autoloader
 
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' \
-    /etc/apache2/sites-available/000-default.conf
+RUN chown -R www-data:www-data /var/www/html \
+  && chmod -R 755 /var/www/html/public
+
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["/start.sh"]
