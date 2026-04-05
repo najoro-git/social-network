@@ -80,7 +80,4 @@ $router->post('/messages/send',  [\App\Controllers\MessagingController::class, '
 $router->post('/messages/delete',[\App\Controllers\MessagingController::class, 'delete']);
 $router->get('/messages/{id}',   [\App\Controllers\MessagingController::class, 'show']);
 
-// Migration temporaire
-$router->get('/migrate', [\App\Controllers\MigrateController::class, 'run']);
-
 $router->dispatch();
