@@ -1313,7 +1313,7 @@ if (isset($_SESSION['user_id'])) {
 <!-- FOOTER -->
 <footer class="footer">
     <div class="footer-brand">SOCIALNET</div>
-    <div class="footer-text"> &copy;2026 SocialNet</div>
+    <div class="footer-text"> &copy; 2026 by 3714-3673-3545-3626 .L2_ASR MAHAY MI-DEV </div>
     <div class="footer-links">
         <a href="/login">Connexion</a>
         <a href="/register">Inscription</a>
